@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>css3,3d轮播图</title>
+  <link rel="stylesheet" href="./css/css3banner.css">
+  <script src="./js/css3banner.js" async></script>
+  <style>
+    body{
+      background: #f1f1f1;
+    }
+    #solid{
+      width: 600px;
+      height: 338px;
+      margin: 50px auto;
+      border: 1px;
+      box-shadow: 0 0 5px #000;
+      box-sizing: border-box;
+    }
+    #solid2{
+      width: 600px;
+      height: 300px;
+      margin: 50px auto;
+      border: 1px;
+      box-shadow: 0 0 5px #000;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div id="solid"></div>
+  <div id="solid2"></div>
+  <script>
+    window.onload=function(){
+
+      setTimeout(bannerInit,0)
+      
+    }
+
+    function bannerInit(){
+
+      var banner = Css3Banner({
+        el: '#solid',
+        imgs: ['./img/001.jpg', './img/002.jpg', './img/003.jpg', './img/004.jpg', './img/005.jpg']
+      })
+
+      var banner2 = Css3Banner({
+        el: '#solid2',
+        imgs: ['./img/001.jpg', './img/002.jpg', './img/003.jpg'],
+        autoMoveTime: false,
+        callBack: function(index, lastIndex){
+          console.log('当前：' + index + '  上一次：' + lastIndex)
+        }
+      })
+      
+    }
+
+  </script>
+</body>
+</html>
