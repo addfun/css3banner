@@ -1,8 +1,8 @@
 /*
-tips:
-  存在css3属性和es6字符串模板语法，所有的ie都支持，仅支持高版本Chrome,Firefox
-  不适用生成环境，仅用于学习交流
-  代码地址：https:
+  tips:
+    存在css3属性和es6字符串模板语法，所有的ie都不支持，仅支持高版本Chrome,Firefox
+    不适用生成环境，仅用于学习交流
+    代码地址：https://github.com/addfun/css3banner
 */
 ; (function (root) {
 
