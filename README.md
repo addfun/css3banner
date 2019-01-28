@@ -1,6 +1,7 @@
 ## css3Banner
 
-####参数对象
+### 参数对象
+
 ```
   el: dom/id,class,标签选择器
   imgs: 图片路径数组

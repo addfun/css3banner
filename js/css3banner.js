@@ -239,18 +239,6 @@
       this.isMove = false
       callBack && callBack(index, lastIndex)
     },
-
-    //获取该元素的兄弟元素
-    sibling: function (dom) {
-      var allDom = dom.parentNode.children
-      var sibling = []
-      for (var i = 0, len = allDom.length; i < len; i++) {
-        if (allDom[i] !== dom) {
-          sibling.push(allDom[i])
-        }
-      }
-      return sibling
-    },
     //获取该元素在兄弟元素的索引
     getDomIndex: function(dom){
       var allDom = dom.parentNode.children
