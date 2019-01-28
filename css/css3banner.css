@@ -1,6 +1,4 @@
-*{
-  margin: 0;
-}
+
 
 ul,ol{
   padding: 0;
@@ -8,9 +6,14 @@ ul,ol{
   list-style-type: none;
 }
 
+.css3-banner{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-/*按钮样式*/
-.btn-list{
+/*下标按钮样式*/
+.css3-banner .btn-list{
   position: absolute;
   left: 50%;
   bottom: 0;
@@ -20,7 +23,7 @@ ul,ol{
   font-size: 0;
 
 }
-.btn-list li{
+.css3-banner .btn-list li{
   display: inline-block;
   height: 20px;
   width: 20px;
@@ -32,25 +35,25 @@ ul,ol{
   background: #ccc;
   cursor: pointer;
 }
-.btn-list .active{
+.css3-banner .btn-list .active{
   background: #f40;
   color: #fff;
   cursor: default;
 }
 
-/*图片列表初步样式*/
-.pic-box{
+/*图片列表样式*/
+.css3-banner .pic-box{
   width: 100%;
   height: 100%;
 }
-.pic-box li{
+.css3-banner .pic-box li{
   display: inline-block;
   position: relative;
   transform-style: preserve-3d;
   height: 100%;
   /* transition: transform .6s .2s; */
 }
-.pic-box li div{
+.css3-banner .pic-box li div{
   position: absolute;
   height: 100%;
   width: 100%;
@@ -59,17 +62,57 @@ ul,ol{
   background-size: cover;
 }
 
-/*
-.pic-box li:nth-of-type(1) div{
-  background-position-x: 0px;
+/*左右按钮样式*/
+/* 建议使用字体图标适配大小比较方便() */
+.css3-banner .btn{
+  display: none;
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  transform: translate3d(0, -50%, 0);
+  cursor: pointer;
 }
-.pic-box li:nth-of-type(2) div{
-  background-position-x: -6px;
+.css3-banner:hover .btn{
+  display: block;
 }
-.pic-box li:nth-of-type(3) div{
-  background-position-x: -12px;
+
+.css3-banner .btn:hover::before{
+  background-color: #fff;
+  transition: background-color 0.3s linear;
 }
-.pic-box li:nth-of-type(4) div{
-  background-position-x: -18px;
+.css3-banner .btn:hover::after{
+  background-color: #fff;
+  transition: background-color 0.3s linear;
 }
-*/
+
+.css3-banner .btn::before{
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 30px;
+  background-color: #aaa;
+  transform: translate3d(-50%, 2px, 0) rotateZ(45deg);
+}
+.css3-banner .btn::after{
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 30px;
+  background-color: #aaa;
+  transform: translate3d(-50%, 19px, 0) rotateZ(-45deg);
+}
+.css3-banner .btn-left{
+  left: 0;
+}
+.css3-banner .btn-right{
+  right: 0;
+}
+.css3-banner .btn-right::before{
+  transform: translate3d(-50%, 2px, 0) rotateZ(-45deg);
+}
+.css3-banner .btn-right::after{
+  transform: translate3d(-50%, 19px, 0) rotateZ(45deg);
+}
+

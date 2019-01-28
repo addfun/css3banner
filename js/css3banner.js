@@ -1,5 +1,9 @@
-//所有的ie都不行，仅支持高版本Chrome,Firefox
-
+/*
+tips:
+  存在css3属性和es6字符串模板语法，所有的ie都支持，仅支持高版本Chrome,Firefox
+  不适用生成环境，仅用于学习交流
+  代码地址：https:
+*/
 ; (function (root) {
 
   //粒度(li的个数,数值越大越细腻,太大会影响性能)
@@ -57,17 +61,12 @@
         , size = this.SIZE
         , picList = ''
         , btnList = ''
-        , cssStyle = `.css3-banner-wrap-${size}{
-                        position: relative;
-                        width: 100%;
-                        height: 100%;
-                      }
-                      .css3-banner-wrap-${size} .pic-box li{
+        , cssStyle = `.css3-banner-wrap-${size} .pic-box li{
                         width: ${itemWidth}px;
                       }
                       .css3-banner-wrap-${size} .pic-box li div:nth-of-type(1){
                         background-image: url(${imgs[0]});
-                        transform: rotateX(0deg) translate3d(0,0,169px);
+                        transform: rotateX(0deg) translate3d(0,0,${wrapHeight/2}px);
                       }
                       .css3-banner-wrap-${size} .pic-box li div{
                         background-size: ${wrapWidth}px ${wrapHeight}px;
@@ -96,12 +95,16 @@
       var oWrap = document.createElement('div')
         , oPicBox = document.createElement('ul')
         , oBtnList = document.createElement('ol')
+        , oBtnLeft = document.createElement('div')
+        , oBtnRight = document.createElement('div')
         , oStyle = document.createElement('style')
         , oPicLiStyle = document.createElement('style')
         , oHead = document.head
-      oWrap.className = 'css3-banner-wrap-' + size
+      oWrap.className = 'css3-banner css3-banner-wrap-' + size
       oPicBox.className = 'pic-box'
       oBtnList.className = 'btn-list'
+      oBtnLeft.className = 'btn btn-left'
+      oBtnRight.className = 'btn btn-right'
       oPicLiStyle.setAttribute('data-id', 'pic-box-li-' + (++Css3Banner.size))
       oStyle.setAttribute('data-id', 'css3-banner-' + (++Css3Banner.size))
       oStyle.innerHTML = cssStyle
@@ -112,34 +115,27 @@
       oBtnList.innerHTML = btnList
       oWrap.appendChild(oPicBox)
       oWrap.appendChild(oBtnList)
+      oWrap.appendChild(oBtnLeft)
+      oWrap.appendChild(oBtnRight)
+
       this.$el.appendChild(oWrap)
       this.$wrap = oWrap
       this.$picBox = oPicBox
       this.$btnList = oBtnList
       this.$PicLiStyle = oPicLiStyle
+      this.$btnLeft = oBtnLeft
+      this.$btnRight = oBtnRight
     },
     //设置自动轮播事件
     setAutoMove: function(){
       var time = this.opts.autoMoveTime
-        , imgsLen = this.opts.imgs.length
       function animate(){
+        //索引变大轮播
         var index = this.imgIndex + 1
-        if (index >= imgsLen) {
-          index = 0
-        }
-        //改变图片
-        this.movePic(index)
-        //改变下标
-        var btnListDom = this.$btnList.children
-        for(var i=0,len=btnListDom.length;i<len;i++){
-          btnListDom[i].className = ''
-        }
-        btnListDom[index].className = 'active'
-
+        this.moveFun(index)
         this.timer = setTimeout(animate.bind(this), time)
       }
       this.timer = setTimeout(animate.bind(this), time)
-      
     },
     //绑定事件
     bindEvent: function () {
@@ -154,37 +150,51 @@
           this.setAutoMove()
         }
       }.bind(this), false)
+      this.$btnLeft.addEventListener('click', function(){
+        var index = this.imgIndex - 1
+        this.moveFun(index)
+      }.bind(this), false)
+      this.$btnRight.addEventListener('click', function(){
+        var index = this.imgIndex + 1
+        this.moveFun(index)
+      }.bind(this), false)
       if (this.opts.autoMoveTime){//是否设置轮播事件
         this.setAutoMove()
       }
     },
     //绑定下标列表事件函数
     btnListClick: function (e) {
-      clearTimeout(this.timer)
-      if (!this.isMove){
-        var target = e.target
-        if (!target.className) {
-          this.isMove = true
-          var index = 0
-            , sibling = target.parentNode.children
-          for (var i = 0, len = sibling.length; i < len; i++) {
-            sibling[i].className = ''
-            if (target === sibling[i]) {
-              index = i
-            }
-          }
-          target.className = 'active'
-          this.movePic(index)
-        }
-      }
+      var target = e.target
+      var index = this.getDomIndex(target)
+      this.moveFun(index)
     },
     //图片翻转运动函数
-    movePic: function (nextIndex) {
+    moveFun: function (nextIndex) {
+      //如果图片正在运动就不进行后续执行
+      if(this.isMove) return
+      var curImgIndex = this.imgIndex
+      //如果当前索引等于下一个索引也不进行后续执行
+      if(nextIndex == curImgIndex) return
+      this.isMove = true
       var imgs = this.opts.imgs
+        , imgsLen = imgs.length
         , runTime = this.opts.runTime
         , size = this.SIZE
-        , curImgIndex = this.imgIndex
+        , wrapHeight = this.wrapHeight
         , rotateX
+      if (nextIndex >= imgsLen) {
+        nextIndex = 0
+      }
+      if(nextIndex < 0){
+        nextIndex = imgsLen - 1
+      }
+      //改变下标
+      var btnListDom = this.$btnList.children
+      for (var i = 0, len = btnListDom.length; i < len; i++) {
+        btnListDom[i].className = ''
+      }
+      btnListDom[nextIndex].className = 'active'
+      //改变图片
       //判断往上翻还是往下翻
       if (nextIndex < curImgIndex && Math.abs(nextIndex - curImgIndex) < imgs.length / 2) {
         rotateX = -1
@@ -199,11 +209,11 @@
           }
           .css3-banner-wrap-${size} .pic-box li div:nth-of-type(1){
             background-image: url(${imgs[curImgIndex]});
-            transform: rotateX(0deg) translate3d(0,0,169px);
+            transform: rotateX(0deg) translate3d(0,0,${wrapHeight / 2}px);
           }
           .css3-banner-wrap-${size} .pic-box li div:nth-of-type(2){
             background-image: url(${imgs[nextIndex]});
-            transform: rotateX(${-rotateX * 90}deg) translate3d(0,0,169px);
+            transform: rotateX(${-rotateX * 90}deg) translate3d(0,0,${wrapHeight / 2}px);
           }
         `
       this.imgIndex = nextIndex
@@ -230,7 +240,7 @@
       callBack && callBack(index, lastIndex)
     },
 
-    //获取兄弟元素节点
+    //获取该元素的兄弟元素
     sibling: function (dom) {
       var allDom = dom.parentNode.children
       var sibling = []
@@ -240,10 +250,21 @@
         }
       }
       return sibling
+    },
+    //获取该元素在兄弟元素的索引
+    getDomIndex: function(dom){
+      var allDom = dom.parentNode.children
+      for (var i = 0, len = allDom.length; i < len; i++) {
+        if (allDom[i] === dom) {
+          return i
+        }
+      }
+      return -1
     }
+
   }
 
-  //主要处理el是否为多个(id/class)的逻辑
+  //处理el是否为多个(id/class)的逻辑，对传入的dom挂载节点进行错误验证
   function factory(opts) {
     var el = opts.el
     delete opts['el']
